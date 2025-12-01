@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Cliente - Alex Contabilidade</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f7f6; margin: 20px; }
+        .container { max-width: 1000px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 24px; }
+        h1 { color: #004a99; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; }
+        
+        .dados-cliente { background: #e8f2ff; padding: 20px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #b8d4fe; }
+        .dados-cliente h3 { margin-top: 0; color: #004a99; }
+        .form-dados { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #495057; }
+        .form-control { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ced4da; border-radius: 5px; box-sizing: border-box; }
+        
+        .status-cliente { background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ffeaa7; }
+        .status-cliente h3 { margin-top: 0; color: #856404; }
+        
+        .status-meses { margin-top: 25px; }
+        .status-meses h3 { color: #004a99; margin-bottom: 15px; }
+        .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        
+        .btn { background-color: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; margin-top: 10px; margin-right: 10px; }
+        .btn:hover { background-color: #218838; }
+        .btn-inativo { background-color: #6c757d; }
+        .btn-inativo:hover { background-color: #5a6268; }
+        .nav-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+        .nav-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editando: {{ cliente.nome_cliente }}</h1>
+        
+        <div class="dados-cliente">
+            <h3>Dados do Cliente</h3>
+            <form action="{{ url_for('salvar_edicao_completa', cliente_id=cliente.id) }}" method="POST">
+                <div class="form-dados">
+                    <div class="form-group">
+                        <label for="nome_cliente">Nome do Cliente</label>
+                        <input type="text" name="nome_cliente" id="nome_cliente" class="form-control" value="{{ cliente.nome_cliente }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefone">WhatsApp (com +55)</label>
+                        <input type="text" name="telefone" id="telefone" class="form-control" value="{{ cliente.telefone }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="valor_mensalidade">Valor Mensalidade (R$)</label>
+                        <input type="text" name="valor_mensalidade" id="valor_mensalidade" class="form-control" value="{{ cliente.valor_mensalidade }}" required>
+                    </div>
+                </div>
+        </div>
+
+        <div class="status-cliente">
+            <h3>Status do Cliente</h3>
+            <div class="form-group">
+                <label for="status_cliente">Situação do Cliente:</label>
+                <select name="status_cliente" id="status_cliente" class="form-control">
+                    <option value="ATIVO" {% if cliente.get('status_cliente', 'ATIVO') == 'ATIVO' %}selected{% endif %}>ATIVO</option>
+                    <option value="INATIVO" {% if cliente.get('status_cliente', 'ATIVO') == 'INATIVO' %}selected{% endif %}>INATIVO</option>
+                </select>
+            </div>
+            <p style="margin: 10px 0 0 0; font-size: 14px; color: #856404;">
+                <strong>Obs:</strong> Clientes inativos aparecerão com opacidade reduzida e não poderão ser selecionados para cobranças.
+            </p>
+        </div>
+
+        <div class="status-meses">
+            <h3>Status de Pagamento por Mês</h3>
+            <div class="form-grid">
+                {% for mes in meses %}
+                <div class="form-group">
+                    <label for="status_{{ mes }}">{{ mes.capitalize() }}</label>
+                    <select name="status_{{ mes }}" id="status_{{ mes }}" class="form-control">
+                        <option value="EM ABERTO" {% if cliente.status_meses.get(mes, 'EM ABERTO') != 'PAGO' %}selected{% endif %}>
+                            EM ABERTO
+                        </option>
+                        <option value="PAGO" {% if cliente.status_meses.get(mes, 'EM ABERTO') == 'PAGO' %}selected{% endif %}>
+                            PAGO
+                        </option>
+                    </select>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <button type="submit" class="btn">Salvar Todas as Alterações</button>
+            </form>
+        </div>
+        
+        <a href="{{ url_for('gerenciar_clientes') }}" class="nav-link">&larr; Voltar para a Base de Clientes</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Ambiente Virtual do Python
+.venv/
+
+# Arquivos de Senhas e Tokens
+.env
+
+# PDFs gerados
+recibos_gerados/

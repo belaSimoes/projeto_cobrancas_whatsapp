@@ -1,0 +1,74 @@
+[
+  {
+    "id": 1,
+    "selecao": false,
+    "nome_cliente": "Flavia (teste)",
+    "telefone": "+5567999599103",
+    "valor_mensalidade": "100,00",
+    "valor_parcial_pago": {},
+    "valor_restante": {},
+    "status_meses": {
+      "JANEIRO": "PAGO",
+      "FEVEREIRO": "EM ABERTO",
+      "MARCO": "PAGO",
+      "ABRIL": "PAGO",
+      "MAIO": "PAGO",
+      "JUNHO": "EM ABERTO",
+      "JULHO": "PAGO",
+      "AGOSTO": "PAGO",
+      "SETEMBRO": "EM ABERTO",
+      "OUTUBRO": "EM ABERTO",
+      "NOVEMBRO": "EM ABERTO",
+      "DEZEMBRO": "EM ABERTO"
+    },
+    "status_cliente": "ATIVO"
+  },
+  {
+    "id": 2,
+    "selecao": true,
+    "nome_cliente": "gerencia",
+    "telefone": "+5567996645010",
+    "valor_mensalidade": "150,00",
+    "valor_parcial_pago": {},
+    "valor_restante": {},
+    "status_meses": {
+      "JANEIRO": "PAGO",
+      "FEVEREIRO": "EM ABERTO",
+      "MARCO": "PAGO",
+      "ABRIL": "PAGO",
+      "MAIO": "PAGO",
+      "JUNHO": "EM ABERTO",
+      "JULHO": "PAGO",
+      "AGOSTO": "PAGO",
+      "SETEMBRO": "EM ABERTO",
+      "OUTUBRO": "EM ABERTO",
+      "NOVEMBRO": "EM ABERTO",
+      "DEZEMBRO": "EM ABERTO"
+    },
+    "status_cliente": "ATIVO"
+  },
+  {
+    "id": 3,
+    "selecao": false,
+    "nome_cliente": "Isabela",
+    "telefone": "+5567999194212",
+    "valor_mensalidade": "100,00",
+    "valor_parcial_pago": {},
+    "valor_restante": {},
+    "status_meses": {
+      "JANEIRO": "EM ABERTO",
+      "FEVEREIRO": "EM ABERTO",
+      "MARCO": "EM ABERTO",
+      "ABRIL": "PAGO",
+      "MAIO": "EM ABERTO",
+      "JUNHO": "EM ABERTO",
+      "JULHO": "PAGO",
+      "AGOSTO": "PAGO",
+      "SETEMBRO": "EM ABERTO",
+      "OUTUBRO": "EM ABERTO",
+      "NOVEMBRO": "EM ABERTO",
+      "DEZEMBRO": "EM ABERTO"
+    },
+    "status_cliente": "ATIVO"
+  }
+]
