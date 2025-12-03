@@ -3,103 +3,284 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciar Base de Clientes - Alex Contabilidade</title>
+    <title>Gerenciar Base de Clientes</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 95%; margin: 20px auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 24px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .header .form-title { font-size: 24px; font-weight: 600; color: #004a99; }
-        .nav a { text-decoration: none; padding: 8px 15px; background: #004a99; color: white; border-radius: 5px; font-weight: 500; }
-        .nav a:hover { background: #003366; }
-        
-        .cadastro-form { padding: 20px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; margin-bottom: 25px; }
-        .cadastro-form h3 { margin-top: 0; color: #495057; }
-        .form-inline { display: flex; flex-wrap: wrap; gap: 15px; }
-        .form-inline .form-group { flex: 1; min-width: 200px; }
-        .form-inline label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-        .form-inline input { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ced4da; border-radius: 5px; box-sizing: border-box; }
-        .btn-cadastrar { background: #007bff; color: white; padding: 8px 15px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; align-self: flex-end; }
+        /* --- ESTILOS GERAIS --- */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            background-color: #f4f7f6; 
+            color: #333; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .container { 
+            max-width: 98%; /* Aumentei um pouco para caber os textos completos */
+            margin: 20px auto; 
+            background-color: #ffffff; 
+            border-radius: 6px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
+            padding: 24px; 
+        }
 
-        .acoes-lote { background-color: #e8f2ff; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #b8d4fe; }
-        .acoes-lote h4 { margin-top: 0; color: #004a99; }
-        .btn-editar-lote { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; font-size: 14px; }
-        .btn-editar-lote:hover { background: #0056b3; }
-        .btn-editar-lote:disabled { background: #6c757d; cursor: not-allowed; }
-
-        .search-form { display: flex; gap: 10px; margin-bottom: 15px; }
-        #searchInput { flex-grow: 1; font-size: 16px; padding: 10px 15px; border: 1px solid #dee2e6; border-radius: 5px; }
-        .btn-pesquisar { background-color: #6c757d; color: white; padding: 0 20px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; }
-
-        .table-wrapper { max-height: 600px; overflow: auto; border: 1px solid #dee2e6; border-radius: 5px; }
-        table { width: 100%; border-collapse: collapse; white-space: nowrap; }
-        th, td { padding: 10px 12px; border: 1px solid #dee2e6; text-align: left; vertical-align: middle; }
-        th { background: #e9ecef; color: #495057; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        /* --- CABEÇALHO --- */
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .header .form-title { 
+            font-size: 22px; 
+            font-weight: 700; 
+            color: #2c3e50; 
+        }
+        .nav a { 
+            text-decoration: none; 
+            padding: 8px 16px; 
+            background-color: #004a99; 
+            color: white; 
+            border-radius: 4px; 
+            font-weight: 600; 
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .nav a:hover { 
+            background-color: #003366; 
+        }
         
-        th:nth-child(1), td:nth-child(1) { width: 50px; text-align: center; }
-        th:nth-child(2), td:nth-child(2) { width: 250px; white-space: normal; }
-        th:nth-child(17), td:nth-child(17) { width: 80px; text-align: center; }
+        /* --- CADASTRO --- */
+        .cadastro-form { 
+            padding: 20px; 
+            background-color: #fff;
+            border: 1px solid #e9ecef; 
+            border-radius: 6px; 
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .cadastro-form h3 { margin-top: 0; color: #495057; font-size: 16px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .status { display: inline-block; padding: 3px 8px; font-size: 12px; font-weight: 600; border-radius: 4px; }
-        .status-pago { background-color: #d4edda; color: #155724; }
-        .status-em { background-color: #fff3cd; color: #856404; }
-        .status-inativo { background-color: #6c757d; color: white; }
-        
-        .btn-salvar-selecao { background: #28a745; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px; }
-        .btn-salvar-selecao:hover { background: #218838; }
-        .btn-editar { font-size: 12px; padding: 4px 8px; background-color: #6c757d; color: white; text-decoration: none; border-radius: 4px; }
-        .btn-editar:hover { background-color: #5a6268; }
+        .form-inline { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+        .form-inline .input-group { flex: 1; min-width: 200px; }
+        .form-inline input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ced4da; 
+            border-radius: 4px; 
+            box-sizing: border-box; 
+            font-size: 14px;
+        }
+        .btn-cadastrar { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px 25px; 
+            border: none; 
+            border-radius: 4px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            height: 38px; 
+            font-size: 14px;
+        }
+        .btn-cadastrar:hover { background: #0056b3; }
 
-        .cliente-inativo {
-            opacity: 0.6;
+        /* --- AÇÕES EM LOTE --- */
+        .acoes-lote { 
+            background-color: #e3f2fd; 
+            padding: 15px; 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            border: 1px solid #90caf9; 
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .btn-editar-lote { 
+            background: #1976d2; 
+            color: white; 
+            padding: 8px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: 600;
+        }
+        .btn-editar-lote:disabled { 
+            background: #b0bec5; 
+            cursor: not-allowed; 
+            opacity: 0.8;
+        }
+
+        /* --- PESQUISA --- */
+        .search-form { display: flex; gap: 10px; margin-bottom: 20px; }
+        #searchInput { 
+            flex-grow: 1; 
+            padding: 12px; 
+            border: 1px solid #ced4da; 
+            border-radius: 4px; 
+            font-size: 14px;
+        }
+        .btn-pesquisar { 
+            background-color: #6c757d; 
+            color: white; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            padding: 0 25px; 
+            font-weight: 600;
+        }
+
+        /* --- TABELA --- */
+        .table-wrapper { 
+            max-height: 600px; 
+            overflow: auto; 
+            border: 1px solid #dee2e6; 
+            border-radius: 6px 6px 0 0; 
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            white-space: nowrap; 
+            font-size: 13px;
+        }
+        th, td { 
+            padding: 12px 15px; 
+            border-bottom: 1px solid #dee2e6; 
+            text-align: left; 
+            vertical-align: middle; 
+        }
+        th { 
+            background: #f1f3f5; 
+            color: #495057; 
+            font-weight: 700; 
+            position: sticky; 
+            top: 0; 
+            z-index: 10; 
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+        tr:hover { background-color: #f8f9fa; }
+        
+        /* Larguras */
+        th:nth-child(1), td:nth-child(1) { width: 40px; text-align: center; } 
+        th:nth-child(2), td:nth-child(2) { min-width: 250px; font-weight: 600; color: #2c3e50; } 
+        
+        /* Badges de Status (TEXTO COMPLETO) */
+        .status { 
+            display: inline-block; 
+            padding: 4px 10px; 
+            font-size: 10px; 
+            font-weight: 700; 
+            border-radius: 3px; 
+            text-transform: uppercase; 
+            text-align: center;
+            min-width: 80px; /* Largura mínima maior para caber "EM ABERTO" */
+        }
+        .status-pago { 
+            background-color: #d4edda; 
+            color: #155724; 
+            border: 1px solid #c3e6cb; 
+        }
+        .status-em { 
+            background-color: #fff3cd; 
+            color: #856404; 
+            border: 1px solid #ffeaa7; 
+        }
+        .status-parcial { 
+            background-color: #ffe5d0; 
+            color: #e65100; 
+            border: 1px solid #ffcc80; 
+        }
+        .status-inativo { 
+            background-color: #e9ecef; 
+            color: #6c757d; 
+            border: 1px solid #ced4da; 
+        }
+        
+        /* --- RODAPÉ DE AÇÃO (BOTÃO FIXO) --- */
+        .footer-actions {
             background-color: #f8f9fa;
-        }
-        .cliente-inativo .checkbox-selecao {
-            cursor: not-allowed;
+            border: 1px solid #dee2e6;
+            border-top: none; 
+            border-radius: 0 0 6px 6px; 
+            padding: 15px 20px;
+            display: flex;
+            justify-content: flex-end; 
+            align-items: center;
         }
 
+        .btn-salvar-selecao { 
+            background: #28a745; 
+            color: white; 
+            padding: 10px 30px; 
+            border: none; 
+            border-radius: 4px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+        .btn-salvar-selecao:hover { background: #218838; }
+        
+        .btn-editar { 
+            font-size: 11px; 
+            padding: 4px 10px; 
+            background-color: transparent; 
+            color: #6c757d; 
+            text-decoration: none; 
+            border: 1px solid #ced4da;
+            border-radius: 4px; 
+        }
+        .btn-editar:hover { background-color: #6c757d; color: white; }
+        
+        .cliente-inativo { 
+            background-color: #f9f9f9;
+            color: #adb5bd;
+        }
+        .cliente-inativo td { color: #adb5bd; }
+        
+        @media (max-width: 768px) {
+            .form-inline { flex-direction: column; align-items: stretch; }
+            .btn-cadastrar { width: 100%; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        
         <div class="header">
             <span class="form-title">Gerenciar Base de Clientes</span>
             <div class="nav">
-                <a href="{{ url_for('index') }}">Voltar ao Painel de Controle</a>
+                <a href="{{ url_for('index') }}">Voltar ao Painel</a>
             </div>
         </div>
         
         <div class="cadastro-form">
             <h3>Cadastrar Novo Cliente</h3>
             <form action="{{ url_for('add_cliente') }}" method="POST" class="form-inline">
-                <div class="form-group">
-                    <label for="nome">Nome do Cliente</label>
-                    <input type="text" name="nome_cliente" id="nome" required>
-                </div>
-                <div class="form-group">
-                    <label for="telefone">WhatsApp (com +55)</label>
-                    <input type="text" name="telefone" id="telefone" required>
-                </div>
-                <div class="form-group">
-                    <label for="valor">Valor Mensalidade</label>
-                    <input type="text" name="valor_mensalidade" id="valor" required>
-                </div>
-                <button type="submit" class="btn-cadastrar">Cadastrar</button>
+                <div class="input-group"><input type="text" name="nome_cliente" placeholder="Nome do Cliente" required></div>
+                <div class="input-group"><input type="text" name="telefone" placeholder="WhatsApp (ex: 556799...)" required></div>
+                <div class="input-group"><input type="text" name="valor_mensalidade" placeholder="Valor (ex: 150,00)" required></div>
+                <button type="submit" class="btn-cadastrar">Cadastrar Novo</button>
             </form>
         </div>
 
         <div class="acoes-lote">
-            <h4>Editar Status em Lote</h4>
-            <form action="{{ url_for('editar_selecionados') }}" method="POST">
-                <button type="submit" class="btn-editar-lote" id="btnEditarLote" disabled>Editar Status em Lote</button>
+            <div style="font-size: 14px; color: #0d47a1; font-weight: 500;">
+                Ferramentas de Edição em Lote
+            </div>
+            <form action="{{ url_for('editar_selecionados') }}" method="POST" style="margin: 0;">
+                <button type="submit" class="btn-editar-lote" id="btnEditarLote" disabled>
+                    Editar Status Selecionados
+                </button>
             </form>
-            <p style="margin: 10px 0 0 0; font-size: 14px; color: #666;">
-                <strong>Obs:</strong> Selecione os clientes ativos e clique para definir o status de todos de uma vez
-            </p>
         </div>
 
         <form action="{{ url_for('gerenciar_clientes') }}" method="GET" class="search-form">
-            <input type="text" id="searchInput" name="q" placeholder="Pesquisar pelo nome do cliente..." value="{{ search_query }}">
-            <button type="submit" class="btn-pesquisar">Pesquisar</button>
+            <input type="text" id="searchInput" name="q" placeholder="Pesquisar por nome..." value="{{ search_query }}">
+            <button type="submit" class="btn-pesquisar">Buscar</button>
         </form>
 
         <form action="{{ url_for('salvar_selecao') }}" method="POST" id="formSelecao">
@@ -107,14 +288,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Seleção</th>
+                            <th title="Selecionar" style="width: 40px;">Sel.</th>
                             <th>Cliente</th>
                             <th>WhatsApp</th>
                             <th>Valor</th>
-                            {% for mes in meses %}
-                                <th>{{ mes | capitalize }}</th>
-                            {% endfor %}
-                            <th>Ação</th>
+                            {% for mes in meses %}<th>{{ mes[:3] }}</th>{% endfor %}
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,16 +301,15 @@
                         <tr class="{% if cliente.get('status_cliente', 'ATIVO') == 'INATIVO' %}cliente-inativo{% endif %}">
                             <td style="text-align: center;">
                                 {% if cliente.get('status_cliente', 'ATIVO') == 'ATIVO' %}
-                                    <input type="checkbox" name="selecao_{{ cliente.id }}" value="true" 
-                                           {% if cliente.selecao %}checked{% endif %} class="checkbox-selecao">
+                                    <input type="checkbox" name="selecao_{{ cliente.id }}" value="true" {% if cliente.selecao %}checked{% endif %} class="checkbox-selecao">
                                 {% else %}
-                                    <span class="status-inativo">INATIVO</span>
+                                    -
                                 {% endif %}
                             </td>
                             <td>
                                 {{ cliente.nome_cliente }}
                                 {% if cliente.get('status_cliente', 'ATIVO') == 'INATIVO' %}
-                                    <span class="status-inativo" style="margin-left: 5px;">INATIVO</span>
+                                    <span class="status status-inativo" style="font-size: 9px; margin-left: 5px;">INATIVO</span>
                                 {% endif %}
                             </td>
                             <td>{{ cliente.telefone }}</td>
@@ -139,16 +317,18 @@
                             
                             {% for mes in meses %}
                                 {% set status = cliente.status_meses.get(mes, 'N/D') %}
-                                <td class="status-cell">
+                                <td>
                                     {% if status == 'PAGO' %}
                                         <span class="status status-pago">PAGO</span>
+                                    {% elif status == 'PARCIAL' %}
+                                        <span class="status status-parcial" title="Pago: R$ {{ cliente.pagamentos_parciais.get(mes, '0,00') }}">PARCIAL</span>
                                     {% else %}
                                         <span class="status status-em">EM ABERTO</span>
                                     {% endif %}
                                 </td>
                             {% endfor %}
                             
-                            <td>
+                            <td style="text-align: right;">
                                 <a href="{{ url_for('editar_cliente', cliente_id=cliente.id) }}" class="btn-editar">Editar</a>
                             </td>
                         </tr>
@@ -157,7 +337,9 @@
                 </table>
             </div>
             
-            <button type="submit" class="btn-salvar-selecao">Salvar Alterações de Seleção</button>
+            <div class="footer-actions">
+                <button type="submit" class="btn-salvar-selecao">Salvar Seleção Atual</button>
+            </div>
         </form>
     </div>
 
@@ -167,8 +349,10 @@
             const btnEditarLote = document.getElementById('btnEditarLote');
             
             function atualizarBotaoEditar() {
-                const algumSelecionado = Array.from(checkboxes).some(checkbox => checkbox.checked);
-                btnEditarLote.disabled = !algumSelecionado;
+                if(btnEditarLote) {
+                    const algumSelecionado = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                    btnEditarLote.disabled = !algumSelecionado;
+                }
             }
             
             checkboxes.forEach(checkbox => {

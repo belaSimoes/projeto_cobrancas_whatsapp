@@ -3,24 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Status em Lote - Alex Contabilidade</title>
+    <title>Editar Lote - Alex Contabilidade</title>
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f7f6; margin: 20px; }
         .container { max-width: 600px; margin: auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 24px; }
         h1 { color: #004a99; border-bottom: 1px solid #dee2e6; padding-bottom: 15px; }
         .info-lote { background: #e8f2ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #b8d4fe; }
-        .info-lote strong { color: #004a99; }
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: 600; margin-bottom: 8px; color: #495057; }
         .form-control { width: 100%; padding: 10px; font-size: 16px; border: 1px solid #ced4da; border-radius: 5px; box-sizing: border-box; }
-        .btn { padding: 12px 20px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; margin-right: 10px; }
-        .btn-pago { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .btn-pago:hover { background-color: #c3e6cb; }
-        .btn-aberto { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
-        .btn-aberto:hover { background-color: #ffeaa7; }
-        .nav-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
-        .nav-link:hover { text-decoration: underline; }
+        .btn { padding: 12px 20px; border: none; border-radius: 5px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+        .btn-salvar { background-color: #28a745; color: white; }
+        .btn-salvar:hover { background-color: #218838; }
         .clientes-lista { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px; max-height: 200px; overflow-y: auto; }
+        .nav-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -32,7 +28,7 @@
         </div>
 
         <div class="clientes-lista">
-            <strong>Clientes selecionados:</strong>
+            <strong>Clientes afetados:</strong>
             <ul>
                 {% for cliente in clientes %}
                 <li>{{ cliente.nome_cliente }}</li>
@@ -46,7 +42,7 @@
             <div class="form-group">
                 <label for="mes">Selecione o Mês:</label>
                 <select name="mes" id="mes" class="form-control" required>
-                    <option value="">Selecione um mês</option>
+                    <option value="">Selecione...</option>
                     {% for mes in meses %}
                     <option value="{{ mes }}">{{ mes }}</option>
                     {% endfor %}
@@ -54,15 +50,18 @@
             </div>
             
             <div class="form-group">
-                <label>Definir Status para:</label>
-                <div>
-                    <button type="submit" name="status" value="PAGO" class="btn btn-pago">Marcar como PAGO</button>
-                    <button type="submit" name="status" value="EM ABERTO" class="btn btn-aberto">Marcar como EM ABERTO</button>
-                </div>
+                <label for="status">Novo Status:</label>
+                <select name="status" id="status" class="form-control" required>
+                    <option value="PAGO">PAGO</option>
+                    <option value="EM ABERTO">EM ABERTO</option>
+                    <option value="PARCIAL">PARCIAL</option>
+                </select>
             </div>
+
+            <button type="submit" class="btn btn-salvar">Aplicar Alterações</button>
         </form>
         
-        <a href="{{ url_for('gerenciar_clientes') }}" class="nav-link">&larr; Voltar para a Base de Clientes</a>
+        <a href="{{ url_for('gerenciar_clientes') }}" class="nav-link">&larr; Voltar</a>
     </div>
 </body>
 </html>

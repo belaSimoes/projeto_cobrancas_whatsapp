@@ -1,36 +1,37 @@
 [
   {
     "id": 1,
-    "selecao": false,
+    "selecao": true,
     "nome_cliente": "Flavia (teste)",
     "telefone": "+5567999599103",
     "valor_mensalidade": "100,00",
-    "valor_parcial_pago": {},
-    "valor_restante": {},
     "status_meses": {
       "JANEIRO": "PAGO",
-      "FEVEREIRO": "EM ABERTO",
+      "FEVEREIRO": "PAGO",
       "MARCO": "PAGO",
       "ABRIL": "PAGO",
-      "MAIO": "PAGO",
-      "JUNHO": "EM ABERTO",
+      "MAIO": "PARCIAL",
+      "JUNHO": "PAGO",
       "JULHO": "PAGO",
       "AGOSTO": "PAGO",
-      "SETEMBRO": "EM ABERTO",
-      "OUTUBRO": "EM ABERTO",
-      "NOVEMBRO": "EM ABERTO",
+      "SETEMBRO": "PAGO",
+      "OUTUBRO": "PARCIAL",
+      "NOVEMBRO": "PARCIAL",
       "DEZEMBRO": "EM ABERTO"
     },
-    "status_cliente": "ATIVO"
+    "status_cliente": "ATIVO",
+    "pagamentos_parciais": {
+      "NOVEMBRO": "50,00",
+      "OUTUBRO": "25,00",
+      "MAIO": "80,00"
+    }
   },
   {
     "id": 2,
-    "selecao": true,
+    "selecao": false,
     "nome_cliente": "gerencia",
     "telefone": "+5567996645010",
     "valor_mensalidade": "150,00",
-    "valor_parcial_pago": {},
-    "valor_restante": {},
     "status_meses": {
       "JANEIRO": "PAGO",
       "FEVEREIRO": "EM ABERTO",
@@ -45,6 +46,7 @@
       "NOVEMBRO": "EM ABERTO",
       "DEZEMBRO": "EM ABERTO"
     },
+    "pagamentos_parciais": {},
     "status_cliente": "ATIVO"
   },
   {
@@ -53,8 +55,6 @@
     "nome_cliente": "Isabela",
     "telefone": "+5567999194212",
     "valor_mensalidade": "100,00",
-    "valor_parcial_pago": {},
-    "valor_restante": {},
     "status_meses": {
       "JANEIRO": "EM ABERTO",
       "FEVEREIRO": "EM ABERTO",
@@ -69,6 +69,7 @@
       "NOVEMBRO": "EM ABERTO",
       "DEZEMBRO": "EM ABERTO"
     },
-    "status_cliente": "ATIVO"
+    "status_cliente": "ATIVO",
+    "pagamentos_parciais": {}
   }
 ]
