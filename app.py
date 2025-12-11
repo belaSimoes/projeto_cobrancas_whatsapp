@@ -83,7 +83,7 @@ def get_mes_referencia():
     mes_map = {i+1: mes for i, mes in enumerate(MESES_LISTA)}
     return mes_map[mes_referencia_num]
 
-# --- Função de Cálculo Cumulativo ---
+# --- Função de Cálculo Cumulativo (CORRIGIDA) ---
 def calcular_divida_total(cliente, mes_referencia_nome):
     """
     Soma: Pendências anteriores + Mensalidade atual (ou restante atual).
@@ -105,13 +105,15 @@ def calcular_divida_total(cliente, mes_referencia_nome):
         
         if status == 'EM ABERTO':
             divida_total += valor_mensalidade
-            detalhes_pendencia.append(f"{mes_anterior} (integral)")
+            # ALTERAÇÃO AQUI: Removemos " (integral)"
+            detalhes_pendencia.append(mes_anterior)
         elif status == 'PARCIAL':
             pago = str_para_float(cliente['pagamentos_parciais'].get(mes_anterior, "0"))
             restante = valor_mensalidade - pago
             if restante > 0.01:
                 divida_total += restante
-                detalhes_pendencia.append(f"{mes_anterior} (restante)")
+                # ALTERAÇÃO AQUI: Removemos " (restante)"
+                detalhes_pendencia.append(mes_anterior)
 
     # 2. Somar o MÊS DE REFERÊNCIA (Atual)
     status_ref = cliente['status_meses'].get(mes_referencia_nome, 'EM ABERTO')
@@ -125,6 +127,7 @@ def calcular_divida_total(cliente, mes_referencia_nome):
     
     texto_detalhe = ""
     if detalhes_pendencia:
+        # AQUI FORMATA A LISTA LIMPA
         texto_detalhe = " (Inclui pendências: " + ", ".join(detalhes_pendencia) + ")"
 
     return divida_total, texto_detalhe
@@ -196,7 +199,6 @@ def salvar_edicao_completa(cliente_id):
     
     if not cliente: return redirect(url_for('gerenciar_clientes'))
     
-    # 1. Atualiza dados cadastrais
     cliente['nome_cliente'] = request.form.get('nome_cliente')
     cliente['telefone'] = request.form.get('telefone')
     cliente['valor_mensalidade'] = request.form.get('valor_mensalidade')
@@ -205,7 +207,6 @@ def salvar_edicao_completa(cliente_id):
     if cliente['status_cliente'] == 'INATIVO':
         cliente['selecao'] = False
     
-    # 2. Atualiza Status dos Meses e Parciais
     if 'pagamentos_parciais' not in cliente:
         cliente['pagamentos_parciais'] = {}
 
@@ -213,13 +214,10 @@ def salvar_edicao_completa(cliente_id):
         novo_status = request.form.get(f'status_{mes}')
         if novo_status:
             cliente['status_meses'][mes] = novo_status
-            
-            # Lógica do Pagamento Parcial
             if novo_status == "PARCIAL":
                 valor_pago_str = request.form.get(f'valor_pago_{mes}')
                 cliente['pagamentos_parciais'][mes] = valor_pago_str if valor_pago_str else "0,00"
             else:
-                # Se mudou para PAGO ou EM ABERTO, limpa o registro parcial
                 if mes in cliente['pagamentos_parciais']:
                     del cliente['pagamentos_parciais'][mes]
             
@@ -279,11 +277,11 @@ def executar_cobranca():
     print(f"Mes de referencia: {mes_ref}")
     
     for cliente in clientes:
-        # Filtros e Validações
         if cliente.get('status_cliente', 'ATIVO') == 'INATIVO': continue
         
         status = cliente['status_meses'].get(mes_ref, 'EM ABERTO')
         
+        # Filtros
         if status == 'PAGO': continue
         if filtro_selecao == 'Seleção' and not cliente['selecao']: continue
         if not cliente['telefone'] or cliente['telefone'] == 'S. FONE': continue
@@ -295,18 +293,17 @@ def executar_cobranca():
                 # --- CÁLCULO CUMULATIVO ---
                 valor_a_cobrar, detalhes_pendencia = calcular_divida_total(cliente, mes_ref)
                 
-                # Se não deve nada, pula
                 if valor_a_cobrar <= 0.01:
                     logs.append(f"Aviso: {cliente['nome_cliente']} não tem saldo devedor.")
                     continue
 
                 valor_cobrar_str = float_para_str(valor_a_cobrar)
                 
-                # Mensagem Dinâmica
+                # Monta a mensagem
                 texto_base = f"Olá {cliente['nome_cliente']}, segue recibo referente ao valor total em aberto de R$ {valor_cobrar_str}{detalhes_pendencia}."
                 texto_final = f"{texto_base}\n\n{msg_preenchida}"
                 
-                # Gera PDF com Valor Total
+                # Gera PDF com o VALOR TOTAL ACUMULADO
                 caminho_pdf = gerar_recibo_pdf(cliente['nome_cliente'], valor_cobrar_str)
                 
                 if caminho_pdf:
@@ -322,7 +319,7 @@ def executar_cobranca():
                 logs.append(f"Mensagem livre para {cliente['nome_cliente']}")
                 
         except Exception as e:
-            print(f"Erro critico no cliente {cliente['nome_cliente']}: {e}")
+            print(f"Erro no cliente {cliente['nome_cliente']}: {e}")
 
     flash(f"Processo concluído! Verifique o terminal para detalhes.", "success")
     return redirect(url_for('index'))

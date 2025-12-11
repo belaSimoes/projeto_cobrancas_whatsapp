@@ -28,7 +28,7 @@
   },
   {
     "id": 2,
-    "selecao": false,
+    "selecao": true,
     "nome_cliente": "gerencia",
     "telefone": "+5567996645010",
     "valor_mensalidade": "150,00",
