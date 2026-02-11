@@ -6,9 +6,8 @@
     <title>Painel de Cobranças - Alex Contabilidade</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 20px;
         }
@@ -16,25 +15,25 @@
             max-width: 900px;
             margin: 20px auto;
             background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 24px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 25px;
         }
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 20px;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
             margin-bottom: 20px;
         }
         .header .form-title {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: bold;
             color: #004a99;
         }
         .header .logo {
-            max-width: 250px;
+            max-width: 200px;
             height: auto;
         }
         .nav {
@@ -44,43 +43,48 @@
             text-decoration: none;
             padding: 8px 15px;
             background-color: #e9ecef;
-            color: #495057;
-            border-radius: 5px;
+            color: #333;
+            border-radius: 4px;
             font-weight: 500;
         }
         .nav a:hover {
-            background-color: #d6dbe0;
+            background-color: #d6dbdf;
         }
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
         .form-group label {
             display: block;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: #495057;
+            margin-bottom: 6px;
+            color: #333;
         }
         .form-control {
             width: 100%;
             padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            border: 1px solid #ccc;
+            border-radius: 4px;
             box-sizing: border-box;
+            resize: vertical;
+            min-height: 80px;
         }
         select.form-control {
             width: 200px;
+            min-height: 40px;
+            resize: none;
         }
         .btn {
             background-color: #004a99;
             color: white;
-            padding: 12px 25px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.2s ease;
             width: 100%;
         }
         .btn:hover {
@@ -89,12 +93,11 @@
         .flashes {
             list-style: none;
             padding: 0;
-            margin: 20px 0 0 0;
+            margin-top: 20px;
         }
         .flashes li {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 4px;
             font-weight: 500;
         }
         .flashes.success {
@@ -106,6 +109,11 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #eee;
+            margin: 25px 0;
         }
     </style>
 </head>
@@ -131,24 +139,24 @@
                 </select>
             </div>
 
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+            <hr>
 
             <div class="form-group">
                 <label for="msg_13">Primeiro lembrete</label>
-                <input type="text" name="msg_13" id="msg_13" class="form-control" placeholder="Mensagem que vai ser escrita pelo setor de cobrança">
+                <textarea name="msg_13" id="msg_13" class="form-control" rows="3" placeholder="Digite sua mensagem..."></textarea>
             </div>
 
             <div class="form-group">
                 <label for="msg_18">Segundo lembrete</label>
-                <input type="text" name="msg_18" id="msg_18" class="form-control" placeholder="Mensagem que vai ser escrita pelo setor de cobrança">
+                <textarea name="msg_18" id="msg_18" class="form-control" rows="3" placeholder="Digite sua mensagem..."></textarea>
             </div>
 
             <div class="form-group">
                 <label for="msg_livre">Mensagem livre</label>
-                <input type="text" name="msg_livre" id="msg_livre" class="form-control" placeholder="Mensagem que vai ser escrita pelo setor de cobrança independente do dia">
+                <textarea name="msg_livre" id="msg_livre" class="form-control" rows="4" placeholder="Digite sua mensagem..."></textarea>
             </div>
             
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+            <hr>
 
             <button type="submit" class="btn">Enviar Cobrança</button>
         </form>
@@ -164,5 +172,22 @@
         {% endwith %}
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const textareas = document.querySelectorAll('textarea');
+            const form = document.querySelector('form[action*="executar_cobranca"]');
+            if (form) {
+                textareas.forEach(ta => {
+                    ta.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                            e.preventDefault();
+                            form.submit();
+                        }
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>

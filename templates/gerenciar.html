@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Base de Clientes</title>
     <style>
-        /* --- ESTILOS GERAIS --- */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
             background-color: #f4f7f6; 
@@ -14,15 +13,13 @@
             padding: 20px; 
         }
         .container { 
-            max-width: 98%; /* Aumentei um pouco para caber os textos completos */
+            max-width: 98%;
             margin: 20px auto; 
             background-color: #ffffff; 
             border-radius: 6px; 
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); 
             padding: 24px; 
         }
-
-        /* --- CABEÇALHO --- */
         .header { 
             display: flex; 
             justify-content: space-between; 
@@ -49,8 +46,6 @@
         .nav a:hover { 
             background-color: #003366; 
         }
-        
-        /* --- CADASTRO --- */
         .cadastro-form { 
             padding: 20px; 
             background-color: #fff;
@@ -60,7 +55,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .cadastro-form h3 { margin-top: 0; color: #495057; font-size: 16px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
         .form-inline { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
         .form-inline .input-group { flex: 1; min-width: 200px; }
         .form-inline input { 
@@ -83,8 +77,6 @@
             font-size: 14px;
         }
         .btn-cadastrar:hover { background: #0056b3; }
-
-        /* --- AÇÕES EM LOTE --- */
         .acoes-lote { 
             background-color: #e3f2fd; 
             padding: 15px; 
@@ -110,8 +102,6 @@
             cursor: not-allowed; 
             opacity: 0.8;
         }
-
-        /* --- PESQUISA --- */
         .search-form { display: flex; gap: 10px; margin-bottom: 20px; }
         #searchInput { 
             flex-grow: 1; 
@@ -129,8 +119,6 @@
             padding: 0 25px; 
             font-weight: 600;
         }
-
-        /* --- TABELA --- */
         .table-wrapper { 
             max-height: 600px; 
             overflow: auto; 
@@ -161,12 +149,8 @@
             letter-spacing: 0.5px;
         }
         tr:hover { background-color: #f8f9fa; }
-        
-        /* Larguras */
         th:nth-child(1), td:nth-child(1) { width: 40px; text-align: center; } 
         th:nth-child(2), td:nth-child(2) { min-width: 250px; font-weight: 600; color: #2c3e50; } 
-        
-        /* Badges de Status (TEXTO COMPLETO) */
         .status { 
             display: inline-block; 
             padding: 4px 10px; 
@@ -175,7 +159,7 @@
             border-radius: 3px; 
             text-transform: uppercase; 
             text-align: center;
-            min-width: 80px; /* Largura mínima maior para caber "EM ABERTO" */
+            min-width: 80px;
         }
         .status-pago { 
             background-color: #d4edda; 
@@ -197,8 +181,6 @@
             color: #6c757d; 
             border: 1px solid #ced4da; 
         }
-        
-        /* --- RODAPÉ DE AÇÃO (BOTÃO FIXO) --- */
         .footer-actions {
             background-color: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -209,7 +191,6 @@
             justify-content: flex-end; 
             align-items: center;
         }
-
         .btn-salvar-selecao { 
             background: #28a745; 
             color: white; 
@@ -223,7 +204,6 @@
             transition: background 0.2s;
         }
         .btn-salvar-selecao:hover { background: #218838; }
-        
         .btn-editar { 
             font-size: 11px; 
             padding: 4px 10px; 
@@ -234,13 +214,11 @@
             border-radius: 4px; 
         }
         .btn-editar:hover { background-color: #6c757d; color: white; }
-        
         .cliente-inativo { 
             background-color: #f9f9f9;
             color: #adb5bd;
         }
         .cliente-inativo td { color: #adb5bd; }
-        
         @media (max-width: 768px) {
             .form-inline { flex-direction: column; align-items: stretch; }
             .btn-cadastrar { width: 100%; }
@@ -288,10 +266,13 @@
                 <table>
                     <thead>
                         <tr>
-                            <th title="Selecionar" style="width: 40px;">Sel.</th>
+                            <th title="Selecionar">
+                                <input type="checkbox" id="selecionar_todos" title="Marcar/Desmarcar todos os clientes ativos">
+                            </th>
                             <th>Cliente</th>
                             <th>WhatsApp</th>
                             <th>Valor</th>
+                            <th>Pendência</th>  <!-- ← NOVA COLUNA -->
                             {% for mes in meses %}<th>{{ mes[:3] }}</th>{% endfor %}
                             <th></th>
                         </tr>
@@ -314,6 +295,7 @@
                             </td>
                             <td>{{ cliente.telefone }}</td>
                             <td>R$ {{ cliente.valor_mensalidade }}</td>
+                            <td>R$ {{ cliente.get('pendencia', '0,00') }}</td>  <!-- ← NOVA CÉLULA -->
                             
                             {% for mes in meses %}
                                 {% set status = cliente.status_meses.get(mes, 'N/D') %}
@@ -347,19 +329,51 @@
         document.addEventListener('DOMContentLoaded', function() {
             const checkboxes = document.querySelectorAll('.checkbox-selecao');
             const btnEditarLote = document.getElementById('btnEditarLote');
-            
+            const selectAllCheckbox = document.getElementById('selecionar_todos');
+
             function atualizarBotaoEditar() {
                 if(btnEditarLote) {
                     const algumSelecionado = Array.from(checkboxes).some(checkbox => checkbox.checked);
                     btnEditarLote.disabled = !algumSelecionado;
                 }
             }
-            
+
+            function atualizarSelectAll() {
+                if (selectAllCheckbox) {
+                    const todosCheckboxes = Array.from(checkboxes);
+                    if (todosCheckboxes.length === 0) {
+                        selectAllCheckbox.checked = false;
+                        selectAllCheckbox.indeterminate = false;
+                        return;
+                    }
+                    const todosMarcados = todosCheckboxes.every(cb => cb.checked);
+                    const algumMarcado = todosCheckboxes.some(cb => cb.checked);
+                    
+                    selectAllCheckbox.checked = todosMarcados;
+                    selectAllCheckbox.indeterminate = algumMarcado && !todosMarcados;
+                }
+            }
+
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function(e) {
+                    const checked = e.target.checked;
+                    checkboxes.forEach(cb => {
+                        cb.checked = checked;
+                    });
+                    atualizarBotaoEditar();
+                    selectAllCheckbox.indeterminate = false;
+                });
+            }
+
             checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', atualizarBotaoEditar);
+                checkbox.addEventListener('change', function() {
+                    atualizarBotaoEditar();
+                    atualizarSelectAll();
+                });
             });
-            
+
             atualizarBotaoEditar();
+            atualizarSelectAll();
         });
     </script>
 </body>
